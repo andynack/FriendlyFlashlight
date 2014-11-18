@@ -13,11 +13,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-//import android.view.Menu;
+import android.view.Menu;
 import android.view.SurfaceHolder;
 import android.view.Window;
 import android.view.WindowManager;
 
+@SuppressWarnings("unused")
 public class MainActivity extends Activity implements RtspClient.Callback, Session.Callback, SurfaceHolder.Callback {
 
 	// log tag
@@ -66,9 +67,8 @@ public class MainActivity extends Activity implements RtspClient.Callback, Sessi
         mSession = SessionBuilder.getInstance()
                 .setContext(getApplicationContext())
                 .setAudioEncoder(SessionBuilder.AUDIO_NONE)
-                .setAudioQuality(new AudioQuality(8000, 16000))
+                .setAudioQuality(new AudioQuality(8000, 16000))             
                 .setVideoEncoder(SessionBuilder.VIDEO_H264)
-                .setVideoQuality(new VideoQuality(8000, 16000))
                 .setSurfaceView(mSurfaceView).setPreviewOrientation(0)
                 .setCallback(this).build();
  
@@ -117,11 +117,11 @@ public class MainActivity extends Activity implements RtspClient.Callback, Sessi
         mSurfaceView.getHolder().removeCallback(this);
     }
 	
-/*    @Override
+ /*   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }*/
+    } */
     
     @Override
     public void onSessionError(int reason, int streamType, Exception e) {
