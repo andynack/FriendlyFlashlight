@@ -12,15 +12,27 @@ import net.majorkernelpanic.streaming.video.VideoQuality;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.SurfaceHolder;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "deprecation" })
 public class MainActivity extends Activity implements RtspClient.Callback, Session.Callback, SurfaceHolder.Callback {
 
+	ImageButton btnSwitch;
+	
+//	private Camera camera;
+    private boolean isFlashOn;
+    private boolean hasFlash;
+//  Parameters params;
+    
 	// log tag
 	public final static String TAG = MainActivity.class.getSimpleName();
 	
@@ -46,13 +58,106 @@ public class MainActivity extends Activity implements RtspClient.Callback, Sessi
 		
 		//Initialize RTSP client
 		initRtspClient();
+		
+		// flash switch button
+        btnSwitch = (ImageButton) findViewById(R.id.btnSwitch);
+		
+        // get the camera
+//      getCamera();
+         
+        // displaying button image
+//        toggleButtonImage();
+                  
+        // Switch button click event to toggle flash on/off
+    /*    btnSwitch.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (isFlashOn) {
+                    // turn off flash
+                    turnOffFlash();
+                } else {
+                    // turn on flash
+                    turnOnFlash();
+                }
+            }
+        });*/
 	}
 	
+	// getting camera parameters
+/*	private void getCamera() {
+	    if (camera == null) {
+	        try {
+	            camera = Camera.open();
+	            params = camera.getParameters();
+	        } catch (RuntimeException e) {
+	            Log.e("Camera Error. Failed to Open. Error: ", e.getMessage());
+	        }
+	    }
+	}*/
+	
+	 /*
+	 * Turning On flash
+	 */
+/*	private void turnOnFlash() {
+	    if (!isFlashOn) {
+	        if (camera == null || params == null) {
+	            return;
+	        }
+	        
+	        params = camera.getParameters();
+	        params.setFlashMode(Parameters.FLASH_MODE_TORCH);
+	        camera.setParameters(params);
+	        camera.startPreview();
+	        isFlashOn = true;
+	         
+	        // changing button/switch image
+	        toggleButtonImage();
+	    }
+	 
+	}*/
+	
+	/*
+	 * Turning Off flash
+	 */
+/*	private void turnOffFlash() {
+	    if (isFlashOn) {
+	        if (camera == null || params == null) {
+	            return;
+	        }
+	        
+	        params = camera.getParameters();
+	        params.setFlashMode(Parameters.FLASH_MODE_OFF);
+	        camera.setParameters(params);
+	        camera.stopPreview();
+	        isFlashOn = false;
+	         
+	        // changing button/switch image
+	        toggleButtonImage();
+	    }
+	}*/
+		
+	/*
+	 * Toggle switch button images
+	 * changing image states to on / off
+	 * */
+/*	private void toggleButtonImage(){
+	    if(isFlashOn){
+	        btnSwitch.setImageResource(R.drawable.btn_switch_on);
+	    }else{
+	        btnSwitch.setImageResource(R.drawable.btn_switch_off);
+	    }
+	}*/
+    
 	@Override
 	protected void onResume() {
         super.onResume();
          
         toggleStreaming();
+        
+        // on resume turn on the flash
+	/*    if(hasFlash)
+	        turnOnFlash();*/
     }
 	
 	@Override
@@ -60,13 +165,16 @@ public class MainActivity extends Activity implements RtspClient.Callback, Sessi
         super.onPause();
          
         toggleStreaming();
+        
+        // on pause turn off the flash
+//	    turnOffFlash();
     }
 	
 	private void initRtspClient() {
         // Configures the SessionBuilder
         mSession = SessionBuilder.getInstance()
                 .setContext(getApplicationContext())
-                .setAudioEncoder(SessionBuilder.AUDIO_NONE)
+                .setAudioEncoder(SessionBuilder.AUDIO_AAC)
                 .setAudioQuality(new AudioQuality(8000, 16000))             
                 .setVideoEncoder(SessionBuilder.VIDEO_H264)
                 .setSurfaceView(mSurfaceView).setPreviewOrientation(0)
@@ -207,5 +315,23 @@ public class MainActivity extends Activity implements RtspClient.Callback, Sessi
     public void onBitrateUpdate(long bitrate) {
  
     }
+    
+ /*   protected void onStart() {
+	    super.onStart();
+	     
+	    // on starting the app get the camera params
+	    getCamera();
+	}
+	 
+	@Override
+	protected void onStop() {
+	    super.onStop();
+	     
+	    // on stop release the camera
+	    if (camera != null) {
+	        camera.release();
+	        camera = null;
+	    }
+	}*/
  
 }
