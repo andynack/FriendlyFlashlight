@@ -213,7 +213,11 @@ public class MainActivity extends Activity implements OnClickListener, RtspClien
  
     @Override
     public void surfaceCreated(SurfaceHolder arg0) {
-    	mSession.startPreview(); 
+    	// Start camera preview
+        mSession.startPreview();
+
+        // Start video stream
+        mClient.startStream(); 
     }
  
     @Override
